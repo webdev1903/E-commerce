@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
+// console.log(process.env);
 
 module.exports = () => {
-  return mongoose.connect(
-    "mongodb+srv://prakash:prakash@cluster0.i7uqzpf.mongodb.net/E-commerce?retryWrites=true&w=majority"
-  );
+  return mongoose.connect(process.env.MONGO_URL);
 };

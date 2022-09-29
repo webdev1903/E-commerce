@@ -1,10 +1,17 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { FormLabel, Input, Button, Text, Box } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { AuthContext } from "../context/AuthContext/AuthContextProvider";
+import { AuthStatus } from "../context/AuthContext/action";
+import { Navigate } from "react-router-dom";
 
 export default function Login() {
   const [data, setData] = useState({ email: "", password: "" });
+  const { state, dispatch } = useContext(AuthContext);
+  if (state.authStatus) {
+    return <Navigate to="/" />;
+  }
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
@@ -13,6 +20,7 @@ export default function Login() {
     let creds = res.data;
     if (creds.email === data.email && creds.password === data.password) {
       alert("login successful");
+      dispatch({ type: AuthStatus });
     } else {
       alert("invalid credentials");
     }
