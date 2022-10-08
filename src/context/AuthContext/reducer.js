@@ -10,8 +10,6 @@ export default function reducer(state, action) {
       return { ...state, token: action.payload };
     case "user":
       return { ...state, user: action.payload };
-    case "popover":
-      return { ...state, popover: action.payload };
     default:
       return state;
   }

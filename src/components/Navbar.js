@@ -113,9 +113,11 @@ export default function Navbar() {
           </Link>
         </Box>
       )}
-      <Box p="20px">
-        <Image src="./cart.png" alt="Cart" h="10" />
-      </Box>
+      <Link to="/cart">
+        <Box p="20px">
+          <Image src="./cart.png" alt="Cart" h="10" />
+        </Box>
+      </Link>
     </Flex>
   );
 }

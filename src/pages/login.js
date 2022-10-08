@@ -5,10 +5,12 @@ import axios from "axios";
 import { AuthContext } from "../context/AuthContext/AuthContextProvider";
 import { AuthStatus, Error, User, Token } from "../context/AuthContext/action";
 import { Navigate } from "react-router-dom";
+import { CartContext } from "../context/CartContext/CartContextProvider";
 
 export default function Login() {
   const [data, setData] = useState({ email: "", password: "" });
   const { state, dispatch } = useContext(AuthContext);
+  // const {handleCartCount} = useContext(CartContext)
   if (state.authStatus) {
     return <Navigate to="/" />;
   }
@@ -21,6 +23,7 @@ export default function Login() {
       dispatch({ type: AuthStatus });
       dispatch({ type: Token, payload: res.data.token });
       dispatch({ type: User, payload: res.data.user });
+      // dispatch({})
       //   console.log(res);
     } catch (error) {
       alert(error.response.data);

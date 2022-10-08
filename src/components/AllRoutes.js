@@ -4,6 +4,8 @@ import Login from "../pages/login";
 import Home from "../pages/home";
 import Account from "../pages/account";
 import PrivateRoute from "./PrivateRoute";
+import Product from "../pages/products";
+import Cart from "../pages/cart";
 
 export default function AllRoutes() {
   return (
@@ -16,6 +18,15 @@ export default function AllRoutes() {
         element={
           <PrivateRoute>
             <Account />
+          </PrivateRoute>
+        }
+      ></Route>
+      <Route path="/products" element={<Product />}></Route>
+      <Route
+        path="/cart"
+        element={
+          <PrivateRoute>
+            <Cart />
           </PrivateRoute>
         }
       ></Route>

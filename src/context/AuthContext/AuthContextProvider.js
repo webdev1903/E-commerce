@@ -10,7 +10,6 @@ export default function AuthContexProvider({ children }) {
     authStatus: false,
     token: "",
     user: {},
-    popover: [],
   });
   console.log(state);
   return (

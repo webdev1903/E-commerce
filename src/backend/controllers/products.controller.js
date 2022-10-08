@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
   try {
     const qtitle = req.query.title;
     const page = req.query.page || 1;
-    const limit = req.query.limit || 10;
+    const limit = req.query.limit || 8;
     const offset = (page - 1) * 10;
     const products = await Product.find()
       .skip(offset)
@@ -25,7 +25,7 @@ router.get("/", async (req, res) => {
       const newprods = await Product.find().lean().exec();
       filtered = newprods.filter((e) => {
         let Title = e.title.toLowerCase();
-        ntitle = qtitle.toLowerCase();
+        let ntitle = qtitle.toLowerCase();
         if (Title.startsWith(ntitle)) return e;
       });
       return res.status(200).send(filtered);
