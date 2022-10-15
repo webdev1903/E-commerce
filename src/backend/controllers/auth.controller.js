@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const Mailer = require("../configs/mail");
 
 const newToken = (user) => {
   return jwt.sign({ user }, process.env.JWT_SECRET_KEY);
@@ -10,10 +11,12 @@ const User = require("../models/user.model");
 
 const register = async (req, res) => {
   try {
+    console.log(req.body.email);
     let user = await User.findOne({ email: req.body.email });
     if (user) {
       return res.status(400).send("User already exists");
     }
+    Mailer(req.body.email);
     user = await User.create(req.body);
     return res.status(201).send(user);
   } catch (error) {

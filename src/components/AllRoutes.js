@@ -6,6 +6,7 @@ import Account from "../pages/account";
 import PrivateRoute from "./PrivateRoute";
 import Product from "../pages/products";
 import Cart from "../pages/cart";
+import Checkout from "../pages/checkout";
 
 export default function AllRoutes() {
   return (
@@ -27,6 +28,14 @@ export default function AllRoutes() {
         element={
           <PrivateRoute>
             <Cart />
+          </PrivateRoute>
+        }
+      ></Route>
+      <Route
+        path="/checkout"
+        element={
+          <PrivateRoute>
+            <Checkout />
           </PrivateRoute>
         }
       ></Route>

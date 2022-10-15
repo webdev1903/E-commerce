@@ -15,8 +15,10 @@ import {
   Image,
   Text,
   Button,
+  Heading,
 } from "@chakra-ui/react";
 import CartItem from "../components/cartItem";
+import { useNavigate } from "react-router-dom";
 
 const getUser = async (id) => {
   const res = await axios.get(`http://localhost:2345/users/${id}`);
@@ -29,6 +31,7 @@ export default function Cart() {
   const [data, setData] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const id = state.user._id;
+  const navigate = useNavigate();
   //   console.log(data);
 
   useEffect(() => {
@@ -128,14 +131,22 @@ export default function Cart() {
           </Tbody>
           <Tfoot>
             <Tr>
-              <Th>Grand Total</Th>
+              <Th>
+                <Heading as="h6" size="md">
+                  Grand Total
+                </Heading>
+              </Th>
               <Th></Th>
-              <Th>{Total()}</Th>
+              <Th>
+                <Heading as="h6" size="md">
+                  {Total()}
+                </Heading>
+              </Th>
             </Tr>
           </Tfoot>
         </Table>
       </TableContainer>
-      <Button m="right">Checkout</Button>
+      <Button onClick={() => navigate("/checkout")}>Checkout</Button>
     </Box>
   );
 }

@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema(
     contact: { type: Number, required: true },
     cart: { type: Array, default: [] },
     orders: { type: Array, default: [] },
+    addresses: { type: Array, default: [] },
   },
   {
     versionKey: false,

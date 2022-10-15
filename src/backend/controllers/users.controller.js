@@ -14,7 +14,7 @@ router.get("", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
-    console.log(req.params.id);
+    // console.log(req.params.id);
     const user = await User.findById(req.params.id).lean().exec();
     // console.log(user);
     return res.status(200).send(user);
@@ -25,15 +25,28 @@ router.get("/:id", async (req, res) => {
 
 router.patch("/:id", async (req, res) => {
   try {
-    console.log(req.body);
-    // const { cart } = req.body;
-    // if (cart) {
-    //   const item = await User.findByIdAndUpdate(req.params.id, { cart });
+    // console.log(req.body.address);
+    let item;
+    // if (req.body.address) {
+    //   console.log(true);
+    //   item = await User.findByIdAndUpdate(req.params .id, {
+    //     $push: { addresses: req.body.address },
+    //   });
     //   return res.status(201).send(item);
     // }
-    // console.log(req.params.id, req.body);
-    const item = await User.findByIdAndUpdate(req.params.id, {
+    item = await User.findByIdAndUpdate(req.params.id, {
       $push: { cart: req.body },
+    });
+    return res.status(201).send(item);
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+});
+
+router.patch("/:id/address", async (req, res) => {
+  try {
+    const item = await User.findByIdAndUpdate(req.params.id, {
+      $push: { addresses: req.body },
     });
     return res.status(201).send(item);
   } catch (error) {
@@ -43,7 +56,7 @@ router.patch("/:id", async (req, res) => {
 
 router.patch("/:id/cart", async (req, res) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const item = await User.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });

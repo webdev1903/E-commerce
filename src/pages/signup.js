@@ -10,6 +10,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import axios from "axios";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export default function Signup() {
   const [data, setData] = useState({
@@ -19,6 +20,7 @@ export default function Signup() {
     contact: "",
   });
   const { state, dispatch } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     return dispatch({ type: Error });
@@ -32,9 +34,17 @@ export default function Signup() {
   const handleSignup = async () => {
     try {
       const res = await axios.post(`http://localhost:2345/register`, data);
-      console.log(res.data);
+      console.log(res.status);
       dispatch({ type: User, payload: res.data });
+      if (res.status == 201) {
+        alert("Registration successfully, you can login now");
+        navigate("/login");
+      }
     } catch (error) {
+      console.log(error);
+      if (error.response.status == 400) {
+        alert("user already exists, try another email or log in");
+      }
       dispatch({ type: Error });
       setErr(error.response.data);
     }
