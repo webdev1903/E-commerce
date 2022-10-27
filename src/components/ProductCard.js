@@ -3,7 +3,7 @@ import { AuthContext } from "../context/AuthContext/AuthContextProvider";
 import { useContext } from "react";
 import axios from "axios";
 
-export default function ProductCard({ image, title, price, ratings }) {
+export default function ProductCard({ image, title, price, ratings, _id }) {
   const { state } = useContext(AuthContext);
 
   const handleAddToCart = async () => {
@@ -12,9 +12,14 @@ export default function ProductCard({ image, title, price, ratings }) {
     } else {
       // console.log(state.user._id);
       // console.log(image, price, title, ratings);
-      const res = await axios.patch(
-        `http://localhost:2345/users/${state.user._id}`,
-        { image, title, price, ratings, quantity: 1 }
+      const res = await axios.post(
+        `http://localhost:2345/carts`,
+        {
+          product_id: _id,
+        },
+        {
+          headers: { authorization: `Bearer ${state.token}` },
+        }
       );
       // console.log(res);
     }

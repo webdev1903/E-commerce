@@ -14,7 +14,7 @@ router.get("/", async (req, res) => {
     const qtitle = req.query.title;
     const page = req.query.page || 1;
     const limit = req.query.limit || 8;
-    const offset = (page - 1) * 10;
+    const offset = (page - 1) * 8;
     const products = await Product.find()
       .skip(offset)
       .limit(limit)

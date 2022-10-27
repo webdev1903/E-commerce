@@ -1,9 +1,18 @@
-import { Grid, Box, GridItem, Image, Text, Button } from "@chakra-ui/react";
+import {
+  Grid,
+  Box,
+  GridItem,
+  Image,
+  Text,
+  Button,
+  Select,
+} from "@chakra-ui/react";
 import { useState, useEffect, useRef, useContext } from "react";
 import { AuthContext } from "../context/AuthContext/AuthContextProvider";
 import axios from "axios";
 import ProductCard from "../components/ProductCard";
 import { useSearchParams, useParams } from "react-router-dom";
+import Footer from "../components/footer";
 
 const maintainPage = (value) => {
   value = +value;
@@ -36,14 +45,20 @@ export default function Product() {
     const res = await axios.get(
       `http://localhost:2345/products?page=${page}&limit=8`
     );
-    console.log(res);
     setData(res.data.products);
     totalPages.current = res.data.pages;
-    // console.log(totalPages);
   };
 
   return (
     <Box>
+      <Select placeholder="Sort By" w="fit-content">
+        {/* <option value="">Sort By</option> */}
+        <option value="popular">Popularity</option>
+        <option value="low">Price low to high</option>
+        <option value="high">Price high to low</option>
+        <option value="latest">Latest</option>
+        <option value="rating">Rating</option>
+      </Select>
       <Grid
         templateColumns={["repeat(1,1fr)", "repeat(2,1fr)", "repeat(4,1fr)"]}
         align="center"
@@ -56,6 +71,7 @@ export default function Product() {
               price={e.price}
               title={e.title}
               ratings={e.rating}
+              _id={e._id}
             />
           </GridItem>
         ))}
@@ -75,6 +91,7 @@ export default function Product() {
           NEXT
         </Button>
       </Box>
+      <Footer />
     </Box>
   );
 }

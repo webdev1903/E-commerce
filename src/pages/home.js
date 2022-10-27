@@ -94,7 +94,6 @@ export default function Home() {
     const res = await axios.get(
       `http://localhost:2345/products?page=1&limit=5`
     );
-    console.log(res);
     setData(res.data.products);
     dispatch({ type: Loading });
   };

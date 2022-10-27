@@ -35,7 +35,7 @@ export default function Navbar() {
   const handleSearch = async (s) => {
     const res = await axios(`http://localhost:2345/products?title=${s}`);
     setSearchData(res.data);
-    console.log(res);
+    // console.log(res);
   };
 
   const debouncing = (s) => {

@@ -7,9 +7,6 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true },
     password: { type: String, required: true },
     contact: { type: Number, required: true },
-    cart: { type: Array, default: [] },
-    orders: { type: Array, default: [] },
-    addresses: { type: Array, default: [] },
   },
   {
     versionKey: false,

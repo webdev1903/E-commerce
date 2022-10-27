@@ -16,10 +16,9 @@ import axios from "axios";
 export default function Address() {
   const [data, setData] = useState({
     name: "",
-    number: "",
-    address1: "",
-    address2: "",
-    address3: "",
+    mobile: "",
+    address_line_1: "",
+    address_line_2: "",
     landmark: "",
     state: "",
     city: "",
@@ -27,6 +26,7 @@ export default function Address() {
   });
   const { state } = useContext(AuthContext);
   const id = state.user._id;
+  const token = state.token;
 
   let obj = {
     "": [],
@@ -1279,16 +1279,25 @@ export default function Address() {
 
   const handleData = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
-    console.log(data);
+    // console.log(data);
   };
 
   const handleAddress = async () => {
-    // console.log(data);
-    let res = await axios.patch(
-      `http://localhost:2345/users/${id}/address`,
-      data
+    // console.log("res");
+    for (let key in data) {
+      if (data[key] == "") {
+        return alert(`please enter ${key}`);
+      }
+    }
+    const res = await axios.post(
+      `http://localhost:2345/addresses`,
+      {
+        address: data,
+      },
+      {
+        headers: { authorization: `Bearer ${token}` },
+      }
     );
-    // console.log(res);
   };
 
   return (
@@ -1312,32 +1321,24 @@ export default function Address() {
           <FormLabel>Mobile No.</FormLabel>
           <Input
             type="number"
-            name="number"
-            value={data.number}
+            name="mobile"
+            value={data.mobile}
             onChange={handleData}
           />
           <FormLabel>Address line 1</FormLabel>
           <Input
             type="address"
-            name="address1"
-            value={data.address1}
+            name="address_line_1"
+            value={data.address_line_1}
             placeholder="Flat no./House no."
             onChange={handleData}
           />
           <FormLabel>Adress line 2</FormLabel>
           <Input
             type="address"
-            name="address2"
-            value={data.address2}
+            name="address_line_2"
+            value={data.address_line_2}
             placeholder="Society/ building/ street name"
-            onChange={handleData}
-          />
-          <FormLabel>Address line 3</FormLabel>
-          <Input
-            type="address"
-            name="address3"
-            value={data.address3}
-            placeholder="Area name"
             onChange={handleData}
           />
           <FormLabel>Landmark</FormLabel>

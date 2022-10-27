@@ -19,68 +19,99 @@ import {
 } from "@chakra-ui/react";
 import CartItem from "../components/cartItem";
 import { useNavigate } from "react-router-dom";
+import { Loading } from "../context/AuthContext/action";
 
-const getUser = async (id) => {
-  const res = await axios.get(`http://localhost:2345/users/${id}`);
-  //   console.log(res);
+const getUser = async (token) => {
+  const res = await axios.get(`http://localhost:2345/carts`, {
+    headers: { authorization: `Bearer ${token}` },
+  });
   return res;
 };
 
 export default function Cart() {
   const { state, dispatch } = useContext(AuthContext);
   const [data, setData] = useState([]);
-  const [quantity, setQuantity] = useState(1);
   const id = state.user._id;
+  const token = state.token;
   const navigate = useNavigate();
-  //   console.log(data);
 
   useEffect(() => {
-    // const res = getUser(id).then((res) => setData(res.data.cart));
     updatedData();
     Total();
-    // console.log("U", res);
   }, []);
 
+  if (state.loading) {
+    return <h1>...Loading</h1>;
+  }
+
   const updatedData = async () => {
-    const res = await getUser(id);
-    setData(res.data.cart);
+    dispatch({ type: Loading });
+    const res = await getUser(token);
+    setData(res.data);
+    dispatch({ type: Loading });
+  };
+
+  function Total() {
+    let sum = 0;
+    for (let i = 0; i < data.length; i++) {
+      let prod = data[i].product_id;
+      sum += prod.price * data[i].quantity;
+    }
+    return sum.toFixed(2);
+  }
+
+  const handleRemove = async (id) => {
+    const res = await axios.delete(`http://localhost:2345/carts/${id}`, {
+      headers: { authorization: `Bearer ${token}` },
+    });
+    updatedData();
+  };
+
+  const handleQuantity = async (id, quantity) => {
+    const res = await axios.patch(
+      `http://localhost:2345/carts/${id}`,
+      {
+        quantity,
+      },
+      {
+        headers: { authorization: `Bearer ${token}` },
+      }
+    );
+    updatedData();
+  };
+
+  const handleCheckout = async () => {
+    let orderId = localStorage.getItem("orderId");
+    if (!orderId) {
+      const res = await axios.post(
+        `http://localhost:2345/orders`,
+        {
+          products: data.map((e) => e._id),
+          total: Total(),
+        },
+        {
+          headers: { authorization: `Bearer ${token}` },
+        }
+      );
+      localStorage.setItem("orderId", res.data._id);
+    } else {
+      const res = await axios.patch(
+        `http://localhost:2345/orders/${orderId}`,
+        {
+          products: data.map((e) => e._id),
+          total: Total(),
+        },
+        {
+          headers: { authorization: `Bearer ${token}` },
+        }
+      );
+    }
+    navigate("/checkout");
   };
 
   if (data.length === 0) {
     return <h1>No items in Cart</h1>;
   }
-
-  function Total() {
-    let sum = 0;
-    for (let i = 0; i < data.length; i++) {
-      sum += data[i].price * data[i].quantity;
-    }
-    return sum.toFixed(2);
-  }
-
-  const handleRemove = async (index) => {
-    data.splice(index, 1);
-    const res = await axios.patch(`http://localhost:2345/users/${id}/cart`, {
-      cart: data,
-    });
-    // console.log(res);
-    updatedData();
-  };
-
-  const handleQuantity = async (ch, index) => {
-    // console.log(ch, index);
-    for (let i = 0; i < data.length; i++) {
-      if (i === index) {
-        data[i].quantity += ch;
-      }
-    }
-    const res = await axios.patch(`http://localhost:2345/users/${id}/cart`, {
-      cart: data,
-    });
-    // console.log(res);
-    updatedData();
-  };
-
   return (
     <Box>
       <TableContainer>
@@ -94,40 +125,18 @@ export default function Cart() {
             </Tr>
           </Thead>
           <Tbody>
-            {data.map(
-              (e, i) => (
-                <CartItem
-                  image={e.image}
-                  title={e.title}
-                  price={e.price}
-                  quantity={e.quantity}
-                  handleRemove={handleRemove}
-                  key={Date.now() * Math.random()}
-                  handleQuantity={handleQuantity}
-                  index={i}
-                />
-              )
-              //   <Tr textAlign="center">
-              //     <Td>
-              //       <Image
-              //         src={e.image}
-              //         alt="broken image"
-              //         h={["30px", "50px", "100px"]}
-              //       />
-              //       <Text>{e.title}</Text>
-              //     </Td>
-              //     <Td>
-              //       <Button onClick={() => setQuantity((prev) => prev - 1)}>
-              //         ➖
-              //       </Button>
-              //       <Button>{quantity}</Button>
-              //       <Button onClick={() => setQuantity((prev) => prev + 1)}>
-              //         ➕
-              //       </Button>
-              //     </Td>
-              //     <Td>Rs. {e.price}</Td>
-              //   </Tr>
-            )}
+            {data.map((e, i) => (
+              <CartItem
+                image={e.product_id.image}
+                title={e.product_id.title}
+                price={e.product_id.price}
+                quantity={e.quantity}
+                handleRemove={handleRemove}
+                key={Date.now() * Math.random()}
+                handleQuantity={handleQuantity}
+                _id={e._id}
+              />
+            ))}
           </Tbody>
           <Tfoot>
             <Tr>
@@ -146,7 +155,7 @@ export default function Cart() {
           </Tfoot>
         </Table>
       </TableContainer>
-      <Button onClick={() => navigate("/checkout")}>Checkout</Button>
+      <Button onClick={handleCheckout}>Checkout</Button>
     </Box>
   );
 }

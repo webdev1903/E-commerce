@@ -1,7 +1,7 @@
 import { Box, Text, Flex } from "@chakra-ui/react";
 
 export default function PopOver({ data }) {
-  console.log(data);
+  // console.log(data);
   return (
     <Flex
       direction="column"
@@ -11,6 +11,7 @@ export default function PopOver({ data }) {
       width="500px"
       maxH="400px"
       overflowY="scroll"
+      zIndex="2"
       css={{
         "&::-webkit-scrollbar": {
           display: "none",

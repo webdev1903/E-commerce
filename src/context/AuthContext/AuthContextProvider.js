@@ -11,7 +11,10 @@ export default function AuthContexProvider({ children }) {
     token: "",
     user: {},
   });
-  console.log(state);
+  if (!state.authStatus) {
+    localStorage.removeItem("orderId");
+  }
+  // console.log(state);
   return (
     <AuthContext.Provider value={{ state, dispatch }}>
       {children}

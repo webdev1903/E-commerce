@@ -8,11 +8,13 @@ export default function CartItem({
   handleRemove,
   quantity,
   handleQuantity,
-  index,
+  _id,
 }) {
   //   const [quantity, setQuantity] = useState(1);
 
-  const updateQuantity = () => {};
+  if (quantity === 0) {
+    handleRemove(_id);
+  }
   return (
     <Tr>
       <Td>
@@ -20,13 +22,17 @@ export default function CartItem({
         <Text>{title}</Text>
       </Td>
       <Td>
-        <Button onClick={handleQuantity.bind(null, -1, index)}>➖</Button>
+        <Button onClick={handleQuantity.bind(null, _id, quantity - 1)}>
+          ➖
+        </Button>
         <Button>{quantity}</Button>
-        <Button onClick={handleQuantity.bind(null, 1, index)}>➕</Button>
+        <Button onClick={handleQuantity.bind(null, _id, quantity + 1)}>
+          ➕
+        </Button>
       </Td>
       <Td>Rs. {price}</Td>
       <Td>
-        <Button onClick={handleRemove.bind(null, index)}>Remove</Button>
+        <Button onClick={handleRemove.bind(null, _id)}>Remove</Button>
       </Td>
     </Tr>
   );
