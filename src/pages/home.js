@@ -19,75 +19,76 @@ export default function Home() {
     handleData();
   }, []);
   if (state.loading) {
-    return (
-      <Box>
-        <Box w="100%">
-          <Skeleton w="100%" h="600px" />
-        </Box>
-        <Grid
-          top="350px"
-          templateColumns={["repeat(2,1fr)", "repeat(3,1fr)", "repeat(5,1fr)"]}
-          justifyContent="space-between"
-          gap={1}
-          align="center"
-        >
-          <GridItem h="300px">
-            <Image />
-            <Text>
-              <Skeleton />
-            </Text>
-            <Button>
-              <Skeleton />
-            </Button>
-            <Button>
-              <Skeleton />
-            </Button>
-          </GridItem>
-          <GridItem h="300px">
-            <Image />
-            <Text>
-              <Skeleton />
-            </Text>
-            <Button>
-              <Skeleton />
-            </Button>
-            <Button>
-              <Skeleton />
-            </Button>
-          </GridItem>
-          <GridItem h="300px">
-            <Image />
-            <Text>
-              <Skeleton />
-            </Text>
-            <Button>
-              <Skeleton />
-            </Button>
-            <Button>
-              <Skeleton />
-            </Button>
-          </GridItem>
-          <GridItem h="300px">
-            <Image />
-            <Text>
-              <Skeleton />
-            </Text>
-            <Button>
-              <Skeleton />
-            </Button>
-            <Button>
-              <Skeleton />
-            </Button>
-          </GridItem>
-        </Grid>
-        <Button>
-          <Skeleton />
-        </Button>
-        <Box>
-          <Skeleton />
-        </Box>
-      </Box>
-    );
+    return <h1>...Loading</h1>;
+    // return (
+    //   <Box>
+    //     <Box w="100%">
+    //       <Skeleton w="100%" h="600px" />
+    //     </Box>
+    //     <Grid
+    //       top="350px"
+    //       templateColumns={["repeat(2,1fr)", "repeat(3,1fr)", "repeat(5,1fr)"]}
+    //       justifyContent="space-between"
+    //       gap={1}
+    //       align="center"
+    //     >
+    //       <GridItem h="300px">
+    //         <Image />
+    //         <Text>
+    //           <Skeleton />
+    //         </Text>
+    //         <Button>
+    //           <Skeleton />
+    //         </Button>
+    //         <Button>
+    //           <Skeleton />
+    //         </Button>
+    //       </GridItem>
+    //       <GridItem h="300px">
+    //         <Image />
+    //         <Text>
+    //           <Skeleton />
+    //         </Text>
+    //         <Button>
+    //           <Skeleton />
+    //         </Button>
+    //         <Button>
+    //           <Skeleton />
+    //         </Button>
+    //       </GridItem>
+    //       <GridItem h="300px">
+    //         <Image />
+    //         <Text>
+    //           <Skeleton />
+    //         </Text>
+    //         <Button>
+    //           <Skeleton />
+    //         </Button>
+    //         <Button>
+    //           <Skeleton />
+    //         </Button>
+    //       </GridItem>
+    //       <GridItem h="300px">
+    //         <Image />
+    //         <Text>
+    //           <Skeleton />
+    //         </Text>
+    //         <Button>
+    //           <Skeleton />
+    //         </Button>
+    //         <Button>
+    //           <Skeleton />
+    //         </Button>
+    //       </GridItem>
+    //     </Grid>
+    //     <Button>
+    //       <Skeleton />
+    //     </Button>
+    //     <Box>
+    //       <Skeleton />
+    //     </Box>
+    //   </Box>
+    // );
   }
 
   const handleData = async () => {
@@ -124,18 +125,20 @@ export default function Home() {
   return (
     <>
       <Box>
-        {/* {state.popover.length > 0 && <Popover data={state.popover}></Popover>} */}
         <Box position="relative">
           <Image
             src={slidingImage}
             alt="broken image"
             w="100%"
             h="100%"
+            objectPosition="left"
           ></Image>
         </Box>
         <Grid
+          display={["none", "grid", "grid"]}
           position="absolute"
-          top="350px"
+          top={["200px", "250px", "350px"]}
+          // display={["none", "block", "block"]}
           templateColumns={["repeat(2,1fr)", "repeat(3,1fr)", "repeat(5,1fr)"]}
           justifyContent="space-between"
           gap={1}
@@ -154,7 +157,7 @@ export default function Home() {
                 <Text>{trimTitle(e.title)}</Text>
                 <Button>Price : Rs.{e.price}</Button>
                 <Button>
-                  Rating : {e.rating.rate} ({e.rating.count})
+                  Rating : {e.rating[0].rate} ({e.rating[0].count})
                 </Button>
               </GridItem>
             ))}

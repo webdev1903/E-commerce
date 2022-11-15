@@ -9,11 +9,15 @@ import {
   Button,
   Heading,
 } from "@chakra-ui/react";
+import { CloseIcon } from "@chakra-ui/icons";
 import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext/AuthContextProvider";
 import axios from "axios";
+import { setDeliveryAddress } from "../redux/cart/cart.actions";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-export default function Address() {
+export default function Address({ addressModel }) {
   const [data, setData] = useState({
     name: "",
     mobile: "",
@@ -27,6 +31,8 @@ export default function Address() {
   const { state } = useContext(AuthContext);
   const id = state.user._id;
   const token = state.token;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   let obj = {
     "": [],
@@ -1298,11 +1304,33 @@ export default function Address() {
         headers: { authorization: `Bearer ${token}` },
       }
     );
+    dispatch(setDeliveryAddress(data));
+    navigate("/ordersummary");
   };
 
   return (
-    <Box>
+    <Box
+      position="absolute"
+      left="0"
+      right="0"
+      top="0"
+      bottom="0"
+      margin="auto"
+      backgroundColor="white"
+      boxShadow="0 0 14px 0 rgb(15 17 17 / 50%)"
+      overflowY="scroll"
+      w={["89%", "80%", "80%"]}
+      zIndex="2"
+    >
       <Heading>Delivery Address</Heading>
+      <CloseIcon
+        position="absolute"
+        border="1px solid"
+        borderColor="black"
+        right="10px"
+        top="10px"
+        onClick={addressModel}
+      />
       <FormControl
         isRequired
         w={["100%", "80%", "70%"]}
@@ -1370,19 +1398,20 @@ export default function Address() {
               {data.state.length > 0 &&
                 obj[data.state].map((e) => <option value={e}>{e}</option>)}
             </Select>
+
             <FormLabel>Pincode:</FormLabel>
             <Input
-              type="pincode"
+              type="number"
               name="pincode"
               value={data.pincode}
               onChange={handleData}
-              w="300px"
+              w="150px"
             />
           </Flex>
           <Input
             type="submit"
             onClick={handleAddress}
-            value="Add Address"
+            value="Use this Address"
             backgroundColor="teal.600"
             color="white"
             _hover={{ backgroundColor: "teal" }}

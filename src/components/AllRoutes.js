@@ -7,6 +7,9 @@ import PrivateRoute from "./PrivateRoute";
 import Product from "../pages/products";
 import Cart from "../pages/cart";
 import Checkout from "../pages/checkout";
+import OrderSummary from "../pages/orderSummary";
+import Payment from "../pages/payment";
+import PaymentSuccess from "../pages/paymentSuccess";
 
 export default function AllRoutes() {
   return (
@@ -36,6 +39,30 @@ export default function AllRoutes() {
         element={
           <PrivateRoute>
             <Checkout />
+          </PrivateRoute>
+        }
+      ></Route>
+      <Route
+        path="/ordersummary"
+        element={
+          <PrivateRoute>
+            <OrderSummary />
+          </PrivateRoute>
+        }
+      ></Route>
+      <Route
+        path="/payment"
+        element={
+          <PrivateRoute>
+            <Payment />
+          </PrivateRoute>
+        }
+      ></Route>
+      <Route
+        path="/paymentsuccess"
+        element={
+          <PrivateRoute>
+            <PaymentSuccess />
           </PrivateRoute>
         }
       ></Route>

@@ -2,26 +2,18 @@ import { Flex, Image, Text, Button } from "@chakra-ui/react";
 import { AuthContext } from "../context/AuthContext/AuthContextProvider";
 import { useContext } from "react";
 import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { addItemToCart } from "../redux/cart/cart.actions";
 
 export default function ProductCard({ image, title, price, ratings, _id }) {
   const { state } = useContext(AuthContext);
+  const dispatch = useDispatch();
 
   const handleAddToCart = async () => {
     if (!state.authStatus) {
       alert("Please login first");
     } else {
-      // console.log(state.user._id);
-      // console.log(image, price, title, ratings);
-      const res = await axios.post(
-        `http://localhost:2345/carts`,
-        {
-          product_id: _id,
-        },
-        {
-          headers: { authorization: `Bearer ${state.token}` },
-        }
-      );
-      // console.log(res);
+      dispatch(addItemToCart(state.token, _id));
     }
   };
   return (

@@ -29,7 +29,16 @@ router.patch("/:id", authMiddleware, async (req, res) => {
   try {
     const cart = await Cart.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
-    });
+    }).populate("product_id");
+    return res.status(200).send(cart);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+});
+
+router.delete("", authMiddleware, async (req, res) => {
+  try {
+    const cart = await Cart.deleteMany({ user_id: req.user._id });
     return res.status(201).send(cart);
   } catch (error) {
     return res.status(500).send(error);

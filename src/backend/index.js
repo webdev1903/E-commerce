@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
+require("dotenv").config();
 
+const PORT = process.env.PORT || 2345;
 const userController = require("./controllers/users.controller");
 const prodController = require("./controllers/products.controller");
 const { register, login } = require("./controllers/auth.controller");
@@ -22,10 +24,20 @@ app.use("/carts", cartController);
 app.use("/addresses", addressController);
 app.use("/orders", orderController);
 
-app.listen("2345", async () => {
+// app.use(express.static(path.join(__dirname, "./client/build")));
+// app.get("*", function (_, res) {
+//   res.sendFile(
+//     path.join(__dirname, "./client/build/index.html"),
+//     function (err) {
+//       res.status(500).send(err);
+//     }
+//   );
+// });
+
+app.listen(PORT, async () => {
   try {
     await connect();
-    console.log("listening on port 2345");
+    console.log(`listening on port ${PORT} `);
   } catch (error) {
     console.log(error.message);
   }

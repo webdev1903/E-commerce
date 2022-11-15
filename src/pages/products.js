@@ -30,34 +30,48 @@ export default function Product() {
   const [searchParams, setSearchParams] = useSearchParams();
   let initPage = maintainPage(searchParams.get("page"));
   const [page, setPage] = useState(initPage);
+  const [filter, setFilter] = useState("");
   const totalPages = useRef(null);
   const { state, dispatch } = useContext(AuthContext);
 
   useEffect(() => {
-    handleData(page);
-  }, [page]);
+    handleData(page, filter);
+  }, [page, filter]);
 
   useEffect(() => {
-    setSearchParams({ page });
-  }, [page]);
+    setSearchParams({ page, filter });
+  }, [page, filter]);
 
-  const handleData = async (page = 1) => {
-    const res = await axios.get(
-      `http://localhost:2345/products?page=${page}&limit=8`
-    );
-    setData(res.data.products);
-    totalPages.current = res.data.pages;
+  const handleData = async (page = 1, filter) => {
+    if (filter == "") {
+      const res = await axios.get(
+        `http://localhost:2345/products?page=${page}&limit=8`
+      );
+      // console.log(res);
+      setData(res.data.products);
+      totalPages.current = res.data.pages;
+    } else {
+      const res = await axios.get(
+        `http://localhost:2345/products?page=${page}&limit=8&filter=${filter}`
+      );
+      // console.log(res);
+      setData(res.data.products);
+      totalPages.current = res.data.pages;
+    }
   };
 
   return (
     <Box>
-      <Select placeholder="Sort By" w="fit-content">
-        {/* <option value="">Sort By</option> */}
-        <option value="popular">Popularity</option>
+      <Select
+        placeholder="Sort By"
+        w="fit-content"
+        onChange={(e) => setFilter(e.target.value)}
+      >
         <option value="low">Price low to high</option>
         <option value="high">Price high to low</option>
-        <option value="latest">Latest</option>
         <option value="rating">Rating</option>
+        <option value="popular">Popularity</option>
+        <option value="latest">Latest</option>
       </Select>
       <Grid
         templateColumns={["repeat(1,1fr)", "repeat(2,1fr)", "repeat(4,1fr)"]}
@@ -70,7 +84,7 @@ export default function Product() {
               image={e.image}
               price={e.price}
               title={e.title}
-              ratings={e.rating}
+              ratings={e.rating[0]}
               _id={e._id}
             />
           </GridItem>

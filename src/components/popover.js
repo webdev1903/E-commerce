@@ -1,6 +1,8 @@
 import { Box, Text, Flex } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 export default function PopOver({ data }) {
+  const navigate = useNavigate();
   // console.log(data);
   return (
     <Flex
@@ -11,7 +13,7 @@ export default function PopOver({ data }) {
       width="500px"
       maxH="400px"
       overflowY="scroll"
-      zIndex="2"
+      zIndex="20"
       css={{
         "&::-webkit-scrollbar": {
           display: "none",
@@ -19,7 +21,13 @@ export default function PopOver({ data }) {
       }}
     >
       {data.map((el) => (
-        <Box key={el.id} border="1px solid" borderColor="black" padding="5px">
+        <Box
+          key={el.id}
+          border="1px solid"
+          borderColor="black"
+          padding="5px"
+          onClick={() => navigate("/products")}
+        >
           <Text>{el.title}</Text>
         </Box>
       ))}

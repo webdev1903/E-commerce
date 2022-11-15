@@ -3,12 +3,13 @@ import { Flex, Box, Text } from "@chakra-ui/react";
 export default function Footer() {
   return (
     <Flex
-      direction="row"
+      direction={["column", "row", "row"]}
       flexWrap="wrap"
       backgroundColor="grey"
       justify="space-between"
       align="center"
       bottom="0px"
+      gap={["20px", "0", "0"]}
     >
       <Box>
         <Text>About Us</Text>

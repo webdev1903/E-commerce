@@ -15,16 +15,22 @@ import { AuthContext } from "../context/AuthContext/AuthContextProvider";
 import PopOver from "./popover";
 import styles from "./components.css";
 import axios from "axios";
+import AccountDetails from "./accountDetails";
 
 export default function Navbar() {
   const [searchText, setSearchText] = useState("");
   const { state, dispatch } = useContext(AuthContext);
   const [searchData, setSearchData] = useState([]);
   const ref = useRef(null);
+  const [accountBox, setAccountBox] = useState(false);
 
   useEffect(() => {
     debouncing(searchText);
   }, [searchText]);
+
+  const displayAccountBox = () => {
+    setAccountBox(!accountBox);
+  };
 
   const getFirstName = () => {
     const userDetails = state.user;
@@ -48,6 +54,7 @@ export default function Navbar() {
   };
   return (
     <Flex
+      // display="sticky"
       justify="space-between"
       align="center"
       h="50px"
@@ -63,7 +70,16 @@ export default function Navbar() {
       >
         <Link to="/">E-commerce</Link>
       </Flex>
-      <Box>
+      <Flex
+        h="100%"
+        justify="center"
+        align="center"
+        p="20px"
+        _hover={{ border: "2px solid", borderColor: "black.200", p: "18px" }}
+      >
+        <Link to="/products">Products</Link>
+      </Flex>
+      <Box display={["none", "block", "block"]}>
         <InputGroup position="relative">
           <Input
             type="text"
@@ -102,20 +118,26 @@ export default function Navbar() {
       )}
       {state.authStatus && (
         <Box
+          display="relative"
           w="150px"
           _hover={{ border: "2px solid", borderColor: "black.200" }}
+          onHover={displayAccountBox}
+          mouseOut={displayAccountBox}
         >
           <Link to="/account">
             <Flex direction="column">
-              <Text>Hello, {getFirstName()} </Text>
+              <Text display={["none", "block", "block"]}>
+                Hello, {getFirstName()}{" "}
+              </Text>
               <Text>Account</Text>
             </Flex>
           </Link>
         </Box>
       )}
+      {/* {accountBox && <AccountDetails />} */}
       <Link to="/cart">
         <Box p="20px">
-          <Image src="./cart.png" alt="Cart" h="10" />
+          <Image src="./cart.png" alt="Cart" h={["10", "10", "10"]} />
         </Box>
       </Link>
     </Flex>
