@@ -23,10 +23,14 @@ import { useNavigate } from "react-router-dom";
 import { Loading } from "../context/AuthContext/action";
 import Promo from "../components/promo";
 import { useSelector, useDispatch } from "react-redux";
-import { getCartItems } from "../redux/cart/cart.actions";
+import {
+  getCartItems,
+  updateCartItem,
+  removeCartItem,
+} from "../redux/cart/cart.actions";
 
 const getUser = async (token) => {
-  const res = await axios.get(`http://localhost:2345/carts`, {
+  const res = await axios.get(`/carts`, {
     headers: { authorization: `Bearer ${token}` },
   });
   return res;
@@ -40,7 +44,7 @@ export default function Cart() {
   const cartDispatch = useDispatch();
   const token = state.token;
   const navigate = useNavigate();
-  console.log(data);
+  // console.log(data);
 
   useEffect(() => {
     cartDispatch(getCartItems(state.token));
@@ -52,6 +56,14 @@ export default function Cart() {
 
   const handleCheckout = async () => {
     navigate("/checkout");
+  };
+
+  const handleQuantity = (id, quantity, x, token) => {
+    cartDispatch(updateCartItem(id, { quantity: quantity + x }, token));
+  };
+
+  const handleRemove = (id, token) => {
+    cartDispatch(removeCartItem(id, token));
   };
 
   if (data.length === 0) {
@@ -82,6 +94,8 @@ export default function Cart() {
                 title={e.product_id.title}
                 price={e.product_id.price}
                 quantity={e.quantity}
+                handleQuantity={handleQuantity}
+                handleRemove={handleRemove}
                 key={Date.now() * Math.random()}
                 _id={e._id}
               />

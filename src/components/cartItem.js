@@ -14,11 +14,11 @@ export default function CartItem({
   quantity,
   _id,
   token,
+  handleQuantity,
+  handleRemove,
 }) {
   const dispatch = useDispatch();
-  if (quantity === 0) {
-    dispatch(removeCartItem(_id, token));
-  }
+
   return (
     <Tr>
       <Td>
@@ -27,30 +27,25 @@ export default function CartItem({
       </Td>
       <Td>
         <Button
-          onClick={() =>
-            dispatch(updateCartItem(_id, { quantity: quantity - 1 }, token))
-          }
+          onClick={() => {
+            if (quantity === 1) {
+              console.log("works");
+              handleRemove(_id, token);
+            } else {
+              handleQuantity(_id, quantity, -1, token);
+            }
+          }}
         >
           ➖
         </Button>
         <Button>{quantity}</Button>
-        <Button
-          onClick={() =>
-            dispatch(updateCartItem(_id, { quantity: quantity + 1 }, token))
-          }
-        >
+        <Button onClick={handleQuantity.bind(null, _id, quantity, 1, token)}>
           ➕
         </Button>
       </Td>
       <Td>Rs. {price}</Td>
       <Td>
-        <Button
-          onClick={() => {
-            dispatch(removeCartItem(_id, token));
-          }}
-        >
-          Remove
-        </Button>
+        <Button onClick={handleRemove.bind(null, _id, token)}>Remove</Button>
       </Td>
     </Tr>
   );

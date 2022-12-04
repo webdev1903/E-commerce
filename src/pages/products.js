@@ -59,6 +59,9 @@ export default function Product() {
       totalPages.current = res.data.pages;
     }
   };
+  if (data.length === 0) {
+    return <h1>...Loading</h1>;
+  }
 
   return (
     <Box>

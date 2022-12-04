@@ -119,12 +119,13 @@ export const cartReducer = (state = initialState, { type, payload }) => {
     }
     case REMOVE_CART_ITEMS_SUCCESS: {
       const newItems = state.data.filter((cI) => cI._id !== payload._id);
+      // console.log(payload);
       let sub = payload.product_id.price * payload.quantity;
       return {
         ...state,
         data: newItems,
-        subtotal: state.subtotal - sub,
-        total: state.subtotal - sub,
+        subtotal: (state.subtotal - sub).toFixed(2),
+        total: (state.total - sub).toFixed(2),
         removeCartItem: { loading: false },
       };
     }

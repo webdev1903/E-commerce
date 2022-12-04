@@ -63,6 +63,7 @@ export const updateCartItem = (id, quantity, token) => async (dispatch) => {
     );
     return dispatch({ type: UPDATE_CART_ITEMS_SUCCESS, payload: res.data });
   } catch (error) {
+    // console.log(error);
     return dispatch({ type: UPDATE_CART_ITEMS_ERROR });
   }
 };
@@ -75,6 +76,7 @@ export const removeCartItem = (id, token) => async (dispatch) => {
     });
     return dispatch({ type: REMOVE_CART_ITEMS_SUCCESS, payload: res.data });
   } catch (error) {
+    // console.log(error);
     return dispatch({ type: REMOVE_CART_ITEMS_ERROR });
   }
 };

@@ -7,14 +7,21 @@ import { addItemToCart } from "../redux/cart/cart.actions";
 
 export default function ProductCard({ image, title, price, ratings, _id }) {
   const { state } = useContext(AuthContext);
+  const { data } = useSelector((store) => store.cart);
   const dispatch = useDispatch();
-
+  console.log(data);
   const handleAddToCart = async () => {
     if (!state.authStatus) {
       alert("Please login first");
-    } else {
-      dispatch(addItemToCart(state.token, _id));
     }
+    let flag = false;
+    data.filter((e) => {
+      if (e.product_id == _id || e.product_id._id == _id) {
+        alert("Item already in the cart");
+        flag = true;
+      }
+    });
+    if (flag === false) dispatch(addItemToCart(state.token, _id));
   };
   return (
     <Flex direction="column" justify="center" align="center">
